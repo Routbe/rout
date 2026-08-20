@@ -31,6 +31,7 @@ function AuthenticatedLayout() {
   useEffect(() => {
     if (state !== "out") return;
     const redirect = `${location.pathname}${location.searchStr ?? ""}`;
+    console.log("[guard] redirecting from", location.pathname, location.searchStr);
     navigate({ to: "/auth", search: { redirect }, replace: true } as never);
   }, [state, navigate, location.pathname, location.searchStr]);
 
