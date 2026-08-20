@@ -291,24 +291,22 @@ export default function Auth() {
       return;
     }
     setLoading(true);
-    if (provider === "github") {
-      // GitHub is not brokered by Lovable Cloud; use Supabase Auth directly.
+    // Straight Supabase Auth for every provider: works against any Supabase
+    // instance (self-hosted, Vercel deploy) without a third-party broker.
+    try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        provider,
+        options: { redirectTo: window.location.origin },
       });
       if (error) {
         setLoading(false);
-        toast.error(error.message || "GitHub sign-in failed");
+        console.error(`${PROVIDER_LABELS[provider]} sign-in failed`, error);
+        toast.error(error.message || `${PROVIDER_LABELS[provider]} sign-in failed`);
       }
-      return;
-    }
-    const r = await lovable.auth.signInWithOAuth(provider, {
-      redirect_uri: `${window.location.origin}/auth/callback`,
-    });
-    if (r.error) {
+    } catch (err) {
       setLoading(false);
-      toast.error(r.error.message || "Sign-in failed");
+      console.error("OAuth sign-in error", err);
+      toast.error("Sign-in failed — please try again.");
     }
   };
 
