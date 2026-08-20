@@ -47,36 +47,10 @@ interface RawScan {
   scanned_at: string;
   country: string | null;
   device: string | null;
-  user_agent: string | null;
+  browser: string | null;
+  os: string | null;
 }
 
-/** Browser/OS are derived here so we never store more than the raw agent. */
-function parseAgent(ua: string | null): { browser: string | null; os: string | null } {
-  if (!ua) return { browser: null, os: null };
-  const browser = /edg\//i.test(ua)
-    ? "Edge"
-    : /opr\/|opera/i.test(ua)
-      ? "Opera"
-      : /chrome|crios/i.test(ua)
-        ? "Chrome"
-        : /firefox|fxios/i.test(ua)
-          ? "Firefox"
-          : /safari/i.test(ua)
-            ? "Safari"
-            : "Other";
-  const os = /iphone|ipad|ipod/i.test(ua)
-    ? "iOS"
-    : /android/i.test(ua)
-      ? "Android"
-      : /mac os/i.test(ua)
-        ? "macOS"
-        : /windows/i.test(ua)
-          ? "Windows"
-          : /linux/i.test(ua)
-            ? "Linux"
-            : "Other";
-  return { browser, os };
-}
 
 interface StatsResponse {
   tracked: Tracked;
@@ -125,7 +99,8 @@ export default function Stats() {
         scanned_at: s.scanned_at,
         country: s.country,
         device: s.device,
-        ...parseAgent(s.user_agent),
+        browser: s.browser,
+        os: s.os,
       }));
       const json: StatsResponse = {
         tracked: { ...qr, redirect_url: shortLinkUrl(qr.slug, qr.custom_domain) },

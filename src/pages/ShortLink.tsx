@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "@/lib/router-compat";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { parseAgent } from "@/lib/user-agent";
 
 type Status = "resolving" | "not_found" | "disabled" | "expired" | "suspended" | "error";
 
@@ -71,7 +72,8 @@ export default function ShortLink() {
         _tracked_qr_id: row.id,
         _device: device(),
         _country: null,
-        _user_agent: navigator.userAgent.slice(0, 500),
+        _browser: parseAgent(navigator.userAgent).browser,
+        _os: parseAgent(navigator.userAgent).os,
       } as never);
 
       window.location.replace(row.target_url);
