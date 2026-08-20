@@ -99,6 +99,9 @@ export default function Auth() {
   const [authDebug, setAuthDebug] = useState<Record<string, unknown> | null>(null);
   /** WebAuthn availability, resolved after hydration. */
   const [passkeySupported, setPasskeySupported] = useState(true);
+  // Rendered only after hydration: the debug panel reads window.location.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   useEffect(() => {
     setPasskeySupported(
@@ -428,7 +431,7 @@ export default function Auth() {
               <summary className="cursor-pointer font-medium">Auth debug (dev only)</summary>
               <p className="mt-2 break-all text-muted-foreground">
                 emailRedirectTo:{" "}
-                <code>{typeof window !== "undefined" ? magicLinkRedirect() : "—"}</code>
+                <code>{hydrated ? magicLinkRedirect() : "—"}</code>
               </p>
               <p className="mt-1 text-muted-foreground">
                 passkey support: <code>{String(passkeySupported)}</code>
