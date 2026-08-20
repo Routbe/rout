@@ -47,4 +47,12 @@ describe("privacy guarantees", () => {
       .map(({ file }) => path.relative(ROOT, file));
     expect(offenders).toEqual([]);
   });
+
+  it("logs no referral visits and keeps no audit log writes", () => {
+    const offenders = sources
+      .filter(({ file }) => !file.endsWith("types.ts"))
+      .filter(({ code }) => /referral_visits|trackReferralVisit/.test(code))
+      .map(({ file }) => path.relative(ROOT, file));
+    expect(offenders).toEqual([]);
+  });
 });
