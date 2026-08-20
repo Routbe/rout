@@ -1,0 +1,13 @@
+{
+  "name": "ROUT — Indie QR Code Studio",
+  "short_name": "ROUT",
+  "description": "Print-ready QR codes with custom styling, frames, payments and scan analytics.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF9F5",
+  "theme_color": "#FBF9F5",
+  "icons": [
+    { "src": "https://rout.be/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "https://rout.be/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
