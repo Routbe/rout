@@ -32,6 +32,7 @@ function AuthenticatedLayout() {
     if (state !== "out") return;
     // The layout can still be mounted while the router transitions to /auth;
     // navigating again from there would nest ?redirect= endlessly.
+    console.log("[guard]", location.pathname, state);
     if (location.pathname.startsWith("/auth")) return;
     const redirect = `${location.pathname}${location.searchStr ?? ""}`;
     navigate({ to: "/auth", search: { redirect }, replace: true } as never);
