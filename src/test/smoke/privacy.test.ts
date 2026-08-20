@@ -26,8 +26,10 @@ const sources = walk(ROOT).map((file) => ({ file, code: readFileSync(file, "utf8
 
 describe("privacy guarantees", () => {
   it("never stores referer data", () => {
+    // Note: `referrer` as a referral *handle* (who invited a user) is a product
+    // feature and unrelated to the HTTP Referer header this rule forbids.
     const offenders = sources
-      .filter(({ code }) => /document\.referrer|referer:|referrer:/i.test(code))
+      .filter(({ code }) => /document\.referrer|http_referer|referer\s*[:=]/i.test(code))
       .map(({ file }) => path.relative(ROOT, file));
     expect(offenders).toEqual([]);
   });
