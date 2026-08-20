@@ -527,27 +527,6 @@ export type Database = {
           },
         ]
       }
-      referral_visits: {
-        Row: {
-          created_at: string
-          handle: string
-          id: string
-          inviter_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          handle: string
-          id?: string
-          inviter_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          handle?: string
-          id?: string
-          inviter_id?: string | null
-        }
-        Relationships: []
-      }
       reserved_handles: {
         Row: {
           created_at: string
