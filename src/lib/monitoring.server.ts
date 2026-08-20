@@ -50,32 +50,12 @@ export async function fetchWebhookEvents(opts: {
   );
 }
 
-/** Aggregated referral funnel for one member: visits, sign-ups, conversion. */
-export async function fetchReferralAnalytics(userId: string, handle: string | null) {
+/**
+ * Referral totals for one member: only the number of sign-ups that used their
+ * invite. No visit logging, no referer, no visitor metadata whatsoever.
+ */
+export async function fetchReferralAnalytics(userId: string, _handle: string | null) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-  let visits = 0;
-  let last: string | null = null;
-  try {
-    const { data } = await supabaseAdmin
-      .from("referral_visits" as "profiles")
-      .select("created_at" as "*")
-      .or(
-        [
-          `inviter_id.eq.${userId}`,
-          handle ? `handle.eq.${handle.replace(/^@/, "").toLowerCase()}` : "",
-        ]
-          .filter(Boolean)
-          .join(","),
-      )
-      .order("created_at", { ascending: false })
-      .limit(1000);
-    const rows = (data ?? []) as unknown as { created_at: string }[];
-    visits = rows.length;
-    last = rows[0]?.created_at ?? null;
-  } catch {
-    /* analytics table not provisioned yet — counts stay at zero */
-  }
 
   const { data: profile } = await supabaseAdmin
     .from("profiles")
@@ -84,33 +64,5 @@ export async function fetchReferralAnalytics(userId: string, handle: string | nu
     .maybeSingle();
   const signups = Number((profile as Record<string, unknown> | null)?.["invited_count"] ?? 0);
 
-  return {
-    visits,
-    signups,
-    conversion: visits > 0 ? Math.round((signups / visits) * 1000) / 10 : 0,
-    lastVisitAt: last,
-  };
-}
-
-/**
- * One visit on rout.be/r/<handle>. Best effort — never blocks the redirect.
- * Stores only the inviter handle: no referer, IP, user agent or other metadata.
- */
-export async function recordReferralVisit(handle: string) {
-  const clean = handle.replace(/^@/, "").toLowerCase();
-  if (!clean) return;
-  try {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: inviter } = await supabaseAdmin
-      .from("profiles")
-      .select("id")
-      .eq("username", clean)
-      .maybeSingle();
-    await supabaseAdmin.from("referral_visits" as "profiles").insert({
-      handle: clean,
-      inviter_id: (inviter?.id as string | undefined) ?? null,
-    } as never);
-  } catch (error) {
-    console.error("referral visit log failed", error);
-  }
+  return { signups };
 }

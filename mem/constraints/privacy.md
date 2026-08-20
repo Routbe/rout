@@ -7,6 +7,8 @@ Verboden:
 - Gedragstracking, analytics-profilering, tracking pixels.
 - Metadata-logging van bezoekers (IP-adressen, user agents, referrers) buiten wat strikt nodig is om een link te laten werken.
 - Een auditlog voor linkaanmaak, linkupdates of profielwijzigingen.
+- Referral-bezoeken loggen: de tabel referral_visits is verwijderd; alleen het aantal aanmeldingen (invited_count) telt.
+- Externe telemetrie/SaaS voor foutafhandeling (o.a. Sentry, PostHog).
 
 Toegestaan:
 - Minimale technische routing voor een short link die de gebruiker expliciet aanvraagt: hash/slug -> doel-URL.

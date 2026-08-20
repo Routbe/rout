@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { BarChart3, MousePointerClick, ShieldCheck, UserPlus } from "lucide-react";
+import { BarChart3, ShieldCheck, UserPlus } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { getReferralAnalytics } from "@/lib/monitoring.functions";
 import { fetchUserBadges, type UnlockedBadge } from "@/lib/badges";
 import { useI18n } from "@/lib/i18n";
-import { formatDate, formatNumber } from "@/lib/format";
+import { formatNumber } from "@/lib/format";
 import { logQuietly } from "@/lib/notify";
 
 interface Funnel {
-  visits: number;
   signups: number;
-  conversion: number;
-  lastVisitAt: string | null;
 }
 
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
@@ -85,29 +82,13 @@ export function ReferralAnalytics() {
       </h2>
       <p className="text-sm text-muted-foreground">{t("referral.analytics.body")}</p>
 
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        <Stat
-          icon={<MousePointerClick className="h-3 w-3" aria-hidden />}
-          label={t("referral.analytics.visits")}
-          value={formatNumber(funnel.visits, locale)}
-        />
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <Stat
           icon={<UserPlus className="h-3 w-3" aria-hidden />}
           label={t("referral.analytics.signups")}
           value={formatNumber(funnel.signups, locale)}
         />
-        <Stat
-          icon={<BarChart3 className="h-3 w-3" aria-hidden />}
-          label={t("referral.analytics.conversion")}
-          value={`${funnel.conversion}%`}
-        />
       </div>
-
-      {funnel.lastVisitAt ? (
-        <p className="text-xs text-muted-foreground">
-          {t("referral.analytics.lastVisit", { date: formatDate(funnel.lastVisitAt, locale) })}
-        </p>
-      ) : null}
 
       <div className="rounded-xl border border-border bg-background p-3">
         <p className="mb-2 flex items-center gap-1.5 text-xs font-medium">

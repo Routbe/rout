@@ -37,17 +37,3 @@ export const getReferralAnalytics = createServerFn({ method: "GET" })
     const { fetchReferralAnalytics } = await import("./monitoring.server");
     return fetchReferralAnalytics(context.userId, (profile?.username as string | null) ?? null);
   });
-
-/**
- * Public: bumps the inviter's referral counter for one visit.
- * Privacy: no referer, IP, user agent or any other visitor metadata is stored.
- */
-export const trackReferralVisit = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
-    z.object({ handle: z.string().min(1).max(40) }).parse(data),
-  )
-  .handler(async ({ data }) => {
-    const { recordReferralVisit } = await import("./monitoring.server");
-    await recordReferralVisit(data.handle);
-    return { ok: true };
-  });

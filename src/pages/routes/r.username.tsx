@@ -3,7 +3,6 @@ import { RouteErrorFallback, RoutePendingSkeleton } from "@/components/RouteFall
 import { createFileRoute, useParams, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { storeReferrer } from "@/lib/referral";
-import { trackReferralVisit } from "@/lib/monitoring.functions";
 import { useI18n } from "@/lib/i18n";
 
 /**
@@ -20,8 +19,7 @@ function ReferralLanding() {
 
   useEffect(() => {
     storeReferrer(handle);
-    // Counter for the inviter's dashboard; no visitor metadata, never blocks the redirect.
-    void trackReferralVisit({ data: { handle } }).catch(() => undefined);
+    // Privacy: the referrer handle stays on this device only — nothing is logged.
     void navigate({ to: "/$username", params: { username: handle }, replace: true });
   }, [handle, navigate]);
 
