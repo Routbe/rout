@@ -34,7 +34,12 @@ const EXPECTED = [
 
 function collect(route: any, acc: string[] = []): string[] {
   if (route.id) acc.push(route.id);
-  for (const child of route.children ?? []) collect(child, acc);
+  // The generated tree stores children as an array on some routes and as a
+  // record keyed by route name on others.
+  const children = route.children ?? [];
+  for (const child of Array.isArray(children) ? children : Object.values(children)) {
+    collect(child, acc);
+  }
   return acc;
 }
 
