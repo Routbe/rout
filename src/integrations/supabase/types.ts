@@ -491,28 +491,31 @@ export type Database = {
       }
       qr_scans: {
         Row: {
+          browser: string | null
           country: string | null
           device: string | null
           id: string
+          os: string | null
           scanned_at: string
           tracked_qr_id: string
-          user_agent: string | null
         }
         Insert: {
+          browser?: string | null
           country?: string | null
           device?: string | null
           id?: string
+          os?: string | null
           scanned_at?: string
           tracked_qr_id: string
-          user_agent?: string | null
         }
         Update: {
+          browser?: string | null
           country?: string | null
           device?: string | null
           id?: string
+          os?: string | null
           scanned_at?: string
           tracked_qr_id?: string
-          user_agent?: string | null
         }
         Relationships: [
           {
@@ -970,10 +973,11 @@ export type Database = {
       is_handle_available: { Args: { _username: string }; Returns: boolean }
       log_qr_scan: {
         Args: {
+          _browser?: string
           _country?: string
           _device?: string
+          _os?: string
           _tracked_qr_id: string
-          _user_agent?: string
         }
         Returns: undefined
       }
