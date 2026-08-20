@@ -873,6 +873,93 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_referral: { Args: { p_referrer: string }; Returns: undefined }
+      delete_account: { Args: never; Returns: undefined }
+      generate_unique_handle: { Args: { _seed: string }; Returns: string }
+      get_my_profile: {
+        Args: never
+        Returns: {
+          alias_status: string
+          alias_sync_attempts: number
+          alias_sync_error: string | null
+          alias_sync_status: string
+          alias_synced_at: string | null
+          avatar_url: string | null
+          bio: string | null
+          blocks: Json
+          bluesky_did: string | null
+          business_info: Json
+          card_style: string
+          created_at: string
+          custom_domain: string | null
+          display_name: string | null
+          favicon_url: string | null
+          forwarding_email: string | null
+          forwarding_email_token: string | null
+          forwarding_email_token_expires_at: string | null
+          forwarding_email_verified: boolean
+          handle_grant: string | null
+          id: string
+          is_banned: boolean
+          is_early_believer: boolean
+          is_paid: boolean
+          is_suspended: boolean
+          moderated_at: string | null
+          moderated_by: string | null
+          moderation_reason: string | null
+          payment_method: string | null
+          redirect_target: string
+          referral_count: number
+          referred_by: string | null
+          show_email_publicly: boolean
+          status: string
+          subdomain_enabled: boolean
+          tagline: string | null
+          theme: string
+          tier: string
+          updated_at: string
+          username: string | null
+          verified: boolean
+          verified_at: string | null
+          verified_legal_name: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      get_public_profile: {
+        Args: { _username: string }
+        Returns: {
+          avatar_url: string
+          bio: string
+          blocks: Json
+          bluesky_did: string
+          business_info: Json
+          card_style: string
+          created_at: string
+          custom_domain: string
+          display_name: string
+          favicon_url: string
+          forwarding_email: string
+          id: string
+          is_banned: boolean
+          is_early_believer: boolean
+          is_suspended: boolean
+          show_email_publicly: boolean
+          status: string
+          subdomain_enabled: boolean
+          tagline: string
+          theme: string
+          tier: string
+          username: string
+          verified: boolean
+          verified_at: string
+        }[]
+      }
+      grant_signup_badges: { Args: { _user_id: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -880,6 +967,37 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_handle_available: { Args: { _username: string }; Returns: boolean }
+      log_qr_scan: {
+        Args: {
+          _country?: string
+          _device?: string
+          _tracked_qr_id: string
+          _user_agent?: string
+        }
+        Returns: undefined
+      }
+      manage_short_link: {
+        Args: {
+          _action: string
+          _expires_at?: string
+          _is_active?: boolean
+          _slug?: string
+          _target_url?: string
+          _token: string
+        }
+        Returns: Json
+      }
+      resolve_short_link: {
+        Args: { _slug: string }
+        Returns: {
+          id: string
+          status: string
+          target_url: string
+        }[]
+      }
+      seed_demo_content: { Args: { _user_id: string }; Returns: undefined }
+      short_link_stats: { Args: { _token: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
