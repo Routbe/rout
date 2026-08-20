@@ -1,0 +1,343 @@
+import React, { useState } from 'react';
+import { 
+  Copy, 
+  Check, 
+  ShieldCheck, 
+  Building2, 
+  CreditCard, 
+  Heart, 
+  ArrowLeft, 
+  ExternalLink,
+  Server,
+  Terminal,
+  Lock
+} from 'lucide-react';
+
+export default function Sponsor() {
+  const [selectedAmount, setSelectedAmount] = useState<number | 'custom'>(15);
+  const [customAmount, setCustomAmount] = useState<string>('');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'bank' | 'card' | 'github'>('bank');
+
+  // IBAN & Sovereign Transfer Data
+  const bankDetails = {
+    iban: "BE76 0000 0000 0000",
+    bic: "TRWIXX10",
+    holder: "Delplanche / Rout Infrastructure",
+    reference: `ROUT-DONATE-${Math.floor(1000 + Math.random() * 9000)}`,
+  };
+
+  const handleCopy = (text: string, fieldName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldName);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const getFinalAmount = () => {
+    if (selectedAmount === 'custom') {
+      return customAmount ? parseFloat(customAmount) : 0;
+    }
+    return selectedAmount;
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0B0B0C] text-zinc-100 font-sans selection:bg-zinc-800 selection:text-white">
+      {/* Top Bar */}
+      <header className="border-b border-zinc-800/60 bg-[#0B0B0C]/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a 
+            href="https://rout.be" 
+            className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to rout.be</span>
+          </a>
+          <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-3 py-1 rounded-full">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>100% Sovereign & Independent</span>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <main className="max-w-4xl mx-auto px-6 py-12 md:py-20">
+        
+        {/* Hero Section */}
+        <div className="text-center space-y-4 mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs text-zinc-400 mb-2">
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" />
+            <span>Support Open Infrastructure</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white">
+            Keep Rout Independent & Ad-Free.
+          </h1>
+          <p className="text-zinc-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+            Rout provides high-resolution QR infrastructure without user tracking, paywalled vector exports, or corporate bloat. Your contribution directly funds EU server hosting, database nodes, and open-source development.
+          </p>
+        </div>
+
+        {/* Donation Portal Card */}
+        <div className="bg-[#121214] border border-zinc-800/80 rounded-2xl p-6 md:p-10 shadow-2xl space-y-10">
+          
+          {/* Step 1: Amount Selection */}
+          <div className="space-y-4">
+            <label className="text-sm font-medium text-zinc-300 uppercase tracking-wider text-xs">
+              1. Select Contribution Amount
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[5, 15, 50].map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => {
+                    setSelectedAmount(amount);
+                    setCustomAmount('');
+                  }}
+                  className={`py-3.5 px-4 rounded-xl border text-sm font-semibold transition-all flex flex-col items-center justify-center gap-1 ${
+                    selectedAmount === amount
+                      ? 'bg-zinc-100 text-black border-white shadow-lg'
+                      : 'bg-zinc-900/60 text-zinc-300 border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900'
+                  }`}
+                >
+                  <span className="text-lg">€{amount}</span>
+                  <span className={`text-[10px] ${selectedAmount === amount ? 'text-zinc-600' : 'text-zinc-500'}`}>
+                    {amount === 5 ? 'Server Supporter' : amount === 15 ? 'Infrastructure Backer' : 'Sovereignty Patron'}
+                  </span>
+                </button>
+              ))}
+
+              <button
+                onClick={() => setSelectedAmount('custom')}
+                className={`py-3.5 px-4 rounded-xl border text-sm font-semibold transition-all flex flex-col items-center justify-center gap-1 ${
+                  selectedAmount === 'custom'
+                    ? 'bg-zinc-100 text-black border-white shadow-lg'
+                    : 'bg-zinc-900/60 text-zinc-300 border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900'
+                }`}
+              >
+                <span className="text-lg">Custom</span>
+                <span className={`text-[10px] ${selectedAmount === 'custom' ? 'text-zinc-600' : 'text-zinc-500'}`}>
+                  Choose amount
+                </span>
+              </button>
+            </div>
+
+            {selectedAmount === 'custom' && (
+              <div className="pt-2">
+                <div className="relative max-w-xs">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-medium">€</span>
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Enter amount"
+                    value={customAmount}
+                    onChange={(e) => setCustomAmount(e.target.value)}
+                    className="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3 pl-8 pr-4 text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 transition-colors text-sm"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Step 2: Payment Method Tabs */}
+          <div className="space-y-4">
+            <label className="text-sm font-medium text-zinc-300 uppercase tracking-wider text-xs">
+              2. Select Payment Method
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <button
+                onClick={() => setPaymentMethod('bank')}
+                className={`p-4 rounded-xl border text-left flex items-center gap-3 transition-all ${
+                  paymentMethod === 'bank'
+                    ? 'bg-zinc-900 border-zinc-600 text-white ring-1 ring-zinc-600'
+                    : 'bg-zinc-950/40 border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                }`}
+              >
+                <Building2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div>
+                  <div className="text-sm font-semibold text-white">Direct Transfer</div>
+                  <div className="text-xs text-zinc-500">0% fee • SEPA / Wise</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setPaymentMethod('card')}
+                className={`p-4 rounded-xl border text-left flex items-center gap-3 transition-all ${
+                  paymentMethod === 'card'
+                    ? 'bg-zinc-900 border-zinc-600 text-white ring-1 ring-zinc-600'
+                    : 'bg-zinc-950/40 border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                }`}
+              >
+                <CreditCard className="w-5 h-5 text-blue-400 shrink-0" />
+                <div>
+                  <div className="text-sm font-semibold text-white">Card / Bancontact</div>
+                  <div className="text-xs text-zinc-500">Instant • Stripe Checkout</div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setPaymentMethod('github')}
+                className={`p-4 rounded-xl border text-left flex items-center gap-3 transition-all ${
+                  paymentMethod === 'github'
+                    ? 'bg-zinc-900 border-zinc-600 text-white ring-1 ring-zinc-600'
+                    : 'bg-zinc-950/40 border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                }`}
+              >
+                <Terminal className="w-5 h-5 text-purple-400 shrink-0" />
+                <div>
+                  <div className="text-sm font-semibold text-white">GitHub Sponsors</div>
+                  <div className="text-xs text-zinc-500">For developers</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Step 3: Payment Details Box */}
+          <div className="bg-zinc-950 rounded-xl p-6 border border-zinc-800/80 space-y-6">
+            
+            {/* Bank Transfer Panel */}
+            {paymentMethod === 'bank' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-zinc-800/60">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4" /> Direct SEPA / Wise Transfer
+                  </span>
+                  <span className="text-xs text-zinc-500">Amount to send: <strong className="text-white">€{getFinalAmount() || '—'}</strong></span>
+                </div>
+
+                <div className="space-y-3 font-mono text-xs">
+                  {/* Account Holder */}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/60 border border-zinc-800/50">
+                    <div className="space-y-0.5">
+                      <div className="text-[10px] font-sans text-zinc-500 uppercase">Account Holder</div>
+                      <div className="text-zinc-200 font-medium">{bankDetails.holder}</div>
+                    </div>
+                  </div>
+
+                  {/* IBAN */}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/60 border border-zinc-800/50">
+                    <div className="space-y-0.5">
+                      <div className="text-[10px] font-sans text-zinc-500 uppercase">IBAN</div>
+                      <div className="text-zinc-200 font-medium">{bankDetails.iban}</div>
+                    </div>
+                    <button
+                      onClick={() => handleCopy(bankDetails.iban, 'iban')}
+                      className="p-2 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors flex items-center gap-1 text-xs font-sans"
+                    >
+                      {copiedField === 'iban' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedField === 'iban' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+
+                  {/* BIC */}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/60 border border-zinc-800/50">
+                    <div className="space-y-0.5">
+                      <div className="text-[10px] font-sans text-zinc-500 uppercase">BIC / SWIFT</div>
+                      <div className="text-zinc-200 font-medium">{bankDetails.bic}</div>
+                    </div>
+                    <button
+                      onClick={() => handleCopy(bankDetails.bic, 'bic')}
+                      className="p-2 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors flex items-center gap-1 text-xs font-sans"
+                    >
+                      {copiedField === 'bic' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedField === 'bic' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+
+                  {/* Payment Reference (Automated Matching) */}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-emerald-950/20 border border-emerald-800/40">
+                    <div className="space-y-0.5">
+                      <div className="text-[10px] font-sans text-emerald-400 font-semibold uppercase">Payment Reference (Important)</div>
+                      <div className="text-white font-bold">{bankDetails.reference}</div>
+                    </div>
+                    <button
+                      onClick={() => handleCopy(bankDetails.reference, 'ref')}
+                      className="p-2 rounded-md bg-emerald-900/50 hover:bg-emerald-800/50 text-emerald-200 transition-colors flex items-center gap-1 text-xs font-sans border border-emerald-700/50"
+                    >
+                      {copiedField === 'ref' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedField === 'ref' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-zinc-500 leading-relaxed pt-1">
+                  * Including the payment reference allows our automated Wise inbound webhook to reconcile your contribution instantly without human inspection.
+                </p>
+              </div>
+            )}
+
+            {/* Card / Stripe Panel */}
+            {paymentMethod === 'card' && (
+              <div className="space-y-4 text-center py-4">
+                <p className="text-sm text-zinc-300">
+                  Proceed to secure payment via Stripe Checkout (Supports Bancontact, Visa, Mastercard & Apple Pay).
+                </p>
+                <button 
+                  onClick={() => alert(`Redirecting to Stripe checkout for €${getFinalAmount()}`)}
+                  className="w-full py-3.5 px-6 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 shadow-lg"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  <span>Sponsor €{getFinalAmount() || '15'} via Stripe</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+                </button>
+              </div>
+            )}
+
+            {/* GitHub Sponsors Panel */}
+            {paymentMethod === 'github' && (
+              <div className="space-y-4 text-center py-4">
+                <p className="text-sm text-zinc-300">
+                  Prefer managing your sponsorships directly through your GitHub account?
+                </p>
+                <a 
+                  href="https://github.com/sponsors/jdelplanche"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full py-3.5 px-6 rounded-xl bg-purple-600 text-white font-semibold text-sm hover:bg-purple-500 transition-colors items-center justify-center gap-2 shadow-lg"
+                >
+                  <Terminal className="w-4 h-4" />
+                  <span>Sponsor @jdelplanche on GitHub</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+                </a>
+              </div>
+            )}
+
+          </div>
+
+        </div>
+
+        {/* Transparency Section */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-zinc-400 text-xs">
+          <div className="p-5 rounded-xl bg-zinc-950 border border-zinc-800/60 space-y-2">
+            <Server className="w-5 h-5 text-zinc-200" />
+            <div className="font-semibold text-zinc-200 text-sm">EU Infrastructure</div>
+            <p className="leading-relaxed">
+              Hosted on European nodes with PostgreSQL databases and Infomaniak Swiss storage for maximum data sovereignty.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-xl bg-zinc-950 border border-zinc-800/60 space-y-2">
+            <Lock className="w-5 h-5 text-zinc-200" />
+            <div className="font-semibold text-zinc-200 text-sm">Zero Data Harvesting</div>
+            <p className="leading-relaxed">
+              We do not sell telemetry, insert tracking wrappers into generated QR codes, or trade user data.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-xl bg-zinc-950 border border-zinc-800/60 space-y-2">
+            <Terminal className="w-5 h-5 text-zinc-200" />
+            <div className="font-semibold text-zinc-200 text-sm">100% Open Code</div>
+            <p className="leading-relaxed">
+              All backend Edge Functions, customizer logic, and security rules remain completely open-source under the MIT license.
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-20 text-center text-xs text-zinc-600 space-y-2">
+          <p>Rout Infrastructure • rout.be</p>
+          <p>Designed with Obsidian Dark Mode (`#0B0B0C`). Built for performance & sovereignty.</p>
+        </footer>
+
+      </main>
+    </div>
+  );
+}
