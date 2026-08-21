@@ -230,15 +230,22 @@ export default function Auth() {
     e.preventDefault();
     if (!sentTo || code.length !== 6) return;
     setVerifying(true);
+    const guard = await checkSigninGuard(sentTo);
+    if (guard.locked) {
+      setVerifying(false);
+      return toast.error(lockoutMessage(guard.retryAfter));
+    }
     const { error } = await supabase.auth.verifyOtp({
       email: sentTo,
       token: code,
       type: "email",
     });
+    const after = await recordSigninAttempt(sentTo, !error);
     setVerifying(false);
     if (error) {
       console.error("[auth:verify-otp]", error);
       setCode("");
+      if (after.locked) return toast.error(lockoutMessage(after.retryAfter));
       return toast.error(
         error.message.toLowerCase().includes("expired")
           ? "That code has expired — request a new one."
