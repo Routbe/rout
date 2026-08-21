@@ -67,11 +67,17 @@ export async function patchShortLink(
   id: string,
   patch: { slug?: string; label?: string | null; targetUrl?: string; isActive?: boolean },
 ) {
-  const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
-  if (patch.slug !== undefined) update["slug"] = patch.slug.toLowerCase();
-  if (patch.label !== undefined) update["label"] = patch.label;
-  if (patch.targetUrl !== undefined) update["target_url"] = patch.targetUrl;
-  if (patch.isActive !== undefined) update["is_active"] = patch.isActive;
+  const update: {
+    updated_at: string;
+    slug?: string;
+    label?: string | null;
+    target_url?: string;
+    is_active?: boolean;
+  } = { updated_at: new Date().toISOString() };
+  if (patch.slug !== undefined) update.slug = patch.slug.toLowerCase();
+  if (patch.label !== undefined) update.label = patch.label;
+  if (patch.targetUrl !== undefined) update.target_url = patch.targetUrl;
+  if (patch.isActive !== undefined) update.is_active = patch.isActive;
 
   const { error } = await supabaseAdmin.from("tracked_qrs").update(update).eq("id", id);
   if (error) throw new Error(error.message);
