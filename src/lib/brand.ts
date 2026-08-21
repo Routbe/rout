@@ -122,13 +122,11 @@ export function faviconFor(domain: string): string {
 }
 
 /**
- * Same icon, but through our own edge function so it arrives with CORS headers
- * and can legally be inlined into the QR (favicon CDNs send none).
+ * Same icon, but through our own same-origin route so it arrives with CORS
+ * headers and can legally be inlined into the QR (favicon CDNs send none).
  */
 export function brandLogoProxy(domain: string): string {
-  const base = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-  if (!base) return faviconFor(domain);
-  return `${base}/functions/v1/brand-logo?domain=${encodeURIComponent(domain)}`;
+  return `/api/public/brand-logo?domain=${encodeURIComponent(domain)}`;
 }
 
 /**
