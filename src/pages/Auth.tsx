@@ -264,9 +264,21 @@ export default function Auth() {
     e.preventDefault();
     if (!emailAccepted()) return;
     setLoading(true);
+
+    // Brute-force guard: keyed on an anonymous hash of the address, never the
+    // address itself, an IP or a user agent.
+    const guard = await checkSigninGuard(email);
+    if (guard.locked) {
+      setLoading(false);
+      return toast.error(lockoutMessage(guard.retryAfter));
+    }
+
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const after = await recordSigninAttempt(email, !error);
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      return toast.error(after.locked ? lockoutMessage(after.retryAfter) : error.message);
+    }
     toast.success("Welcome back");
   };
 
