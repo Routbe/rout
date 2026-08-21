@@ -204,6 +204,11 @@ export default function Auth() {
     if (!emailAccepted()) return;
     setLoading(true);
     const address = email.trim().toLowerCase();
+    const guard = await checkSigninGuard(address);
+    if (guard.locked) {
+      setLoading(false);
+      return toast.error(lockoutMessage(guard.retryAfter));
+    }
     const redirectTo = magicLinkRedirect();
     const { error } = await supabase.auth.signInWithOtp({
       email: address,
