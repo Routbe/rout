@@ -37,6 +37,7 @@ import { Route as RUsernameRouteImport } from './routes/r.$username'
 import { Route as SSlugRouteImport } from './routes/s.$slug'
 import { Route as StatsTokenRouteImport } from './routes/stats.$token'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as AuthenticatedAdminOpsRouteImport } from './routes/_authenticated/admin.ops'
 import { Route as AuthenticatedAdminWebhooksRouteImport } from './routes/_authenticated/admin.webhooks'
 import { Route as AuthenticatedDashboardBlueskyRouteImport } from './routes/_authenticated/dashboard.bluesky'
 import { Route as AuthenticatedDashboardDomainsRouteImport } from './routes/_authenticated/dashboard.domains'
@@ -184,6 +185,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminOpsRoute = AuthenticatedAdminOpsRouteImport.update({
+  id: '/ops',
+  path: '/ops',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminWebhooksRoute =
   AuthenticatedAdminWebhooksRouteImport.update({
     id: '/webhooks',
@@ -253,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/s/$slug': typeof SSlugRoute
   '/stats/$token': typeof StatsTokenRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/ops': typeof AuthenticatedAdminOpsRoute
   '/admin/webhooks': typeof AuthenticatedAdminWebhooksRoute
   '/dashboard/bluesky': typeof AuthenticatedDashboardBlueskyRoute
   '/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
@@ -289,6 +296,7 @@ export interface FileRoutesByTo {
   '/s/$slug': typeof SSlugRoute
   '/stats/$token': typeof StatsTokenRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/ops': typeof AuthenticatedAdminOpsRoute
   '/admin/webhooks': typeof AuthenticatedAdminWebhooksRoute
   '/dashboard/bluesky': typeof AuthenticatedDashboardBlueskyRoute
   '/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
@@ -327,6 +335,7 @@ export interface FileRoutesById {
   '/s/$slug': typeof SSlugRoute
   '/stats/$token': typeof StatsTokenRoute
   '/u/$username': typeof UUsernameRoute
+  '/_authenticated/admin/ops': typeof AuthenticatedAdminOpsRoute
   '/_authenticated/admin/webhooks': typeof AuthenticatedAdminWebhooksRoute
   '/_authenticated/dashboard/bluesky': typeof AuthenticatedDashboardBlueskyRoute
   '/_authenticated/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
@@ -365,6 +374,7 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/stats/$token'
     | '/u/$username'
+    | '/admin/ops'
     | '/admin/webhooks'
     | '/dashboard/bluesky'
     | '/dashboard/domains'
@@ -401,6 +411,7 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/stats/$token'
     | '/u/$username'
+    | '/admin/ops'
     | '/admin/webhooks'
     | '/dashboard/bluesky'
     | '/dashboard/domains'
@@ -438,6 +449,7 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/stats/$token'
     | '/u/$username'
+    | '/_authenticated/admin/ops'
     | '/_authenticated/admin/webhooks'
     | '/_authenticated/dashboard/bluesky'
     | '/_authenticated/dashboard/domains'
@@ -674,6 +686,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/ops': {
+      id: '/_authenticated/admin/ops'
+      path: '/ops'
+      fullPath: '/admin/ops'
+      preLoaderRoute: typeof AuthenticatedAdminOpsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/webhooks': {
       id: '/_authenticated/admin/webhooks'
       path: '/webhooks'
@@ -727,10 +746,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminOpsRoute: typeof AuthenticatedAdminOpsRoute
   AuthenticatedAdminWebhooksRoute: typeof AuthenticatedAdminWebhooksRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminOpsRoute: AuthenticatedAdminOpsRoute,
   AuthenticatedAdminWebhooksRoute: AuthenticatedAdminWebhooksRoute,
 }
 
