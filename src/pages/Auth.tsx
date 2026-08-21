@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 import { toast } from "sonner";
+import { checkSigninGuard, recordSigninAttempt, lockoutMessage } from "@/lib/signin-guard";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ArrowLeft, Fingerprint, KeyRound, Loader2, Mail, MailCheck, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -203,6 +204,11 @@ export default function Auth() {
     if (!emailAccepted()) return;
     setLoading(true);
     const address = email.trim().toLowerCase();
+    const guard = await checkSigninGuard(address);
+    if (guard.locked) {
+      setLoading(false);
+      return toast.error(lockoutMessage(guard.retryAfter));
+    }
     const redirectTo = magicLinkRedirect();
     const { error } = await supabase.auth.signInWithOtp({
       email: address,
@@ -224,15 +230,22 @@ export default function Auth() {
     e.preventDefault();
     if (!sentTo || code.length !== 6) return;
     setVerifying(true);
+    const guard = await checkSigninGuard(sentTo);
+    if (guard.locked) {
+      setVerifying(false);
+      return toast.error(lockoutMessage(guard.retryAfter));
+    }
     const { error } = await supabase.auth.verifyOtp({
       email: sentTo,
       token: code,
       type: "email",
     });
+    const after = await recordSigninAttempt(sentTo, !error);
     setVerifying(false);
     if (error) {
       console.error("[auth:verify-otp]", error);
       setCode("");
+      if (after.locked) return toast.error(lockoutMessage(after.retryAfter));
       return toast.error(
         error.message.toLowerCase().includes("expired")
           ? "That code has expired — request a new one."
@@ -264,9 +277,21 @@ export default function Auth() {
     e.preventDefault();
     if (!emailAccepted()) return;
     setLoading(true);
+
+    // Brute-force guard: keyed on an anonymous hash of the address, never the
+    // address itself, an IP or a user agent.
+    const guard = await checkSigninGuard(email);
+    if (guard.locked) {
+      setLoading(false);
+      return toast.error(lockoutMessage(guard.retryAfter));
+    }
+
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const after = await recordSigninAttempt(email, !error);
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      return toast.error(after.locked ? lockoutMessage(after.retryAfter) : error.message);
+    }
     toast.success("Welcome back");
   };
 

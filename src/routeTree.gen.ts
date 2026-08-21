@@ -37,12 +37,14 @@ import { Route as RUsernameRouteImport } from './routes/r.$username'
 import { Route as SSlugRouteImport } from './routes/s.$slug'
 import { Route as StatsTokenRouteImport } from './routes/stats.$token'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as AuthenticatedAdminOpsRouteImport } from './routes/_authenticated/admin.ops'
 import { Route as AuthenticatedAdminWebhooksRouteImport } from './routes/_authenticated/admin.webhooks'
 import { Route as AuthenticatedDashboardBlueskyRouteImport } from './routes/_authenticated/dashboard.bluesky'
 import { Route as AuthenticatedDashboardDomainsRouteImport } from './routes/_authenticated/dashboard.domains'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardRoutesRouteImport } from './routes/_authenticated/dashboard.routes'
 import { Route as ApiPublicBrandLogoRouteImport } from './routes/api_.public.brand-logo'
+import { Route as ApiPublicHealthRouteImport } from './routes/api_.public.health'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -183,6 +185,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminOpsRoute = AuthenticatedAdminOpsRouteImport.update({
+  id: '/ops',
+  path: '/ops',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminWebhooksRoute =
   AuthenticatedAdminWebhooksRouteImport.update({
     id: '/webhooks',
@@ -218,6 +225,11 @@ const ApiPublicBrandLogoRoute = ApiPublicBrandLogoRouteImport.update({
   path: '/api/public/brand-logo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api_/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -247,12 +259,14 @@ export interface FileRoutesByFullPath {
   '/s/$slug': typeof SSlugRoute
   '/stats/$token': typeof StatsTokenRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/ops': typeof AuthenticatedAdminOpsRoute
   '/admin/webhooks': typeof AuthenticatedAdminWebhooksRoute
   '/dashboard/bluesky': typeof AuthenticatedDashboardBlueskyRoute
   '/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
   '/api/public/brand-logo': typeof ApiPublicBrandLogoRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -282,12 +296,14 @@ export interface FileRoutesByTo {
   '/s/$slug': typeof SSlugRoute
   '/stats/$token': typeof StatsTokenRoute
   '/u/$username': typeof UUsernameRoute
+  '/admin/ops': typeof AuthenticatedAdminOpsRoute
   '/admin/webhooks': typeof AuthenticatedAdminWebhooksRoute
   '/dashboard/bluesky': typeof AuthenticatedDashboardBlueskyRoute
   '/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
   '/api/public/brand-logo': typeof ApiPublicBrandLogoRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -319,12 +335,14 @@ export interface FileRoutesById {
   '/s/$slug': typeof SSlugRoute
   '/stats/$token': typeof StatsTokenRoute
   '/u/$username': typeof UUsernameRoute
+  '/_authenticated/admin/ops': typeof AuthenticatedAdminOpsRoute
   '/_authenticated/admin/webhooks': typeof AuthenticatedAdminWebhooksRoute
   '/_authenticated/dashboard/bluesky': typeof AuthenticatedDashboardBlueskyRoute
   '/_authenticated/dashboard/domains': typeof AuthenticatedDashboardDomainsRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
   '/api_/public/brand-logo': typeof ApiPublicBrandLogoRoute
+  '/api_/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -356,12 +374,14 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/stats/$token'
     | '/u/$username'
+    | '/admin/ops'
     | '/admin/webhooks'
     | '/dashboard/bluesky'
     | '/dashboard/domains'
     | '/dashboard/profile'
     | '/dashboard/routes'
     | '/api/public/brand-logo'
+    | '/api/public/health'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -391,12 +411,14 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/stats/$token'
     | '/u/$username'
+    | '/admin/ops'
     | '/admin/webhooks'
     | '/dashboard/bluesky'
     | '/dashboard/domains'
     | '/dashboard/profile'
     | '/dashboard/routes'
     | '/api/public/brand-logo'
+    | '/api/public/health'
   id:
     | '__root__'
     | '/'
@@ -427,12 +449,14 @@ export interface FileRouteTypes {
     | '/s/$slug'
     | '/stats/$token'
     | '/u/$username'
+    | '/_authenticated/admin/ops'
     | '/_authenticated/admin/webhooks'
     | '/_authenticated/dashboard/bluesky'
     | '/_authenticated/dashboard/domains'
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/routes'
     | '/api_/public/brand-logo'
+    | '/api_/public/health'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -461,6 +485,7 @@ export interface RootRouteChildren {
   StatsTokenRoute: typeof StatsTokenRoute
   UUsernameRoute: typeof UUsernameRoute
   ApiPublicBrandLogoRoute: typeof ApiPublicBrandLogoRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -661,6 +686,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/ops': {
+      id: '/_authenticated/admin/ops'
+      path: '/ops'
+      fullPath: '/admin/ops'
+      preLoaderRoute: typeof AuthenticatedAdminOpsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/webhooks': {
       id: '/_authenticated/admin/webhooks'
       path: '/webhooks'
@@ -703,14 +735,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBrandLogoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api_/public/health': {
+      id: '/api_/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminOpsRoute: typeof AuthenticatedAdminOpsRoute
   AuthenticatedAdminWebhooksRoute: typeof AuthenticatedAdminWebhooksRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminOpsRoute: AuthenticatedAdminOpsRoute,
   AuthenticatedAdminWebhooksRoute: AuthenticatedAdminWebhooksRoute,
 }
 
@@ -781,6 +822,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatsTokenRoute: StatsTokenRoute,
   UUsernameRoute: UUsernameRoute,
   ApiPublicBrandLogoRoute: ApiPublicBrandLogoRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
