@@ -656,6 +656,27 @@ export type Database = {
         }
         Relationships: []
       }
+      signin_throttle: {
+        Row: {
+          failures: number
+          identity_hash: string
+          locked_until: string | null
+          window_started_at: string
+        }
+        Insert: {
+          failures?: number
+          identity_hash: string
+          locked_until?: string | null
+          window_started_at?: string
+        }
+        Update: {
+          failures?: number
+          identity_hash?: string
+          locked_until?: string | null
+          window_started_at?: string
+        }
+        Relationships: []
+      }
       tracked_qrs: {
         Row: {
           created_at: string
@@ -981,6 +1002,11 @@ export type Database = {
       }
       seed_demo_content: { Args: { _user_id: string }; Returns: undefined }
       short_link_stats: { Args: { _token: string }; Returns: Json }
+      signin_guard_record: {
+        Args: { _identity_hash: string; _success: boolean }
+        Returns: Json
+      }
+      signin_guard_status: { Args: { _identity_hash: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
