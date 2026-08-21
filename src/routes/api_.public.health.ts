@@ -7,7 +7,7 @@ import { createFileRoute } from "@tanstack/react-router";
  * logged — the handler only reports whether the app can reach its own
  * database and how long that round-trip took.
  */
-export const Route = createFileRoute("/api/public/health")({
+export const Route = createFileRoute("/api_/public/health")({
   server: {
     handlers: {
       GET: async () => {

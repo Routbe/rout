@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils";
-import { LOGO_URL } from "@/lib/site";
+
+/**
+ * Same-origin copy of the bunny badge. The QR renderer draws the centre logo
+ * onto a canvas, so a cross-origin URL (rout.be) is blocked by CORS and wipes
+ * the preview — this local asset always loads.
+ */
+const bunnySrc = "/img/logo.png";
 
 /**
  * Theme-aware vector mark. `/logo.svg` is a clean, transparent outline of the

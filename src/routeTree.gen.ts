@@ -43,6 +43,7 @@ import { Route as AuthenticatedDashboardDomainsRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardRoutesRouteImport } from './routes/_authenticated/dashboard.routes'
 import { Route as ApiPublicBrandLogoRouteImport } from './routes/api_.public.brand-logo'
+import { Route as ApiPublicHealthRouteImport } from './routes/api_.public.health'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -218,6 +219,11 @@ const ApiPublicBrandLogoRoute = ApiPublicBrandLogoRouteImport.update({
   path: '/api/public/brand-logo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api_/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -253,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
   '/api/public/brand-logo': typeof ApiPublicBrandLogoRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -288,6 +295,7 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
   '/api/public/brand-logo': typeof ApiPublicBrandLogoRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -325,6 +333,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/routes': typeof AuthenticatedDashboardRoutesRoute
   '/api_/public/brand-logo': typeof ApiPublicBrandLogoRoute
+  '/api_/public/health': typeof ApiPublicHealthRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -362,6 +371,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/routes'
     | '/api/public/brand-logo'
+    | '/api/public/health'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -397,6 +407,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/routes'
     | '/api/public/brand-logo'
+    | '/api/public/health'
   id:
     | '__root__'
     | '/'
@@ -433,6 +444,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/routes'
     | '/api_/public/brand-logo'
+    | '/api_/public/health'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -461,6 +473,7 @@ export interface RootRouteChildren {
   StatsTokenRoute: typeof StatsTokenRoute
   UUsernameRoute: typeof UUsernameRoute
   ApiPublicBrandLogoRoute: typeof ApiPublicBrandLogoRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -703,6 +716,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBrandLogoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api_/public/health': {
+      id: '/api_/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -781,6 +801,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatsTokenRoute: StatsTokenRoute,
   UUsernameRoute: UUsernameRoute,
   ApiPublicBrandLogoRoute: ApiPublicBrandLogoRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
