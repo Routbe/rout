@@ -60,4 +60,4 @@ export function RoutLogo({ className, size = 28, showWordmark = true }: RoutLogo
 
 // QR codes rasterise the mark onto a canvas, where `currentColor` has no
 // context — those keep using the full-colour raster badge.
-export { logoSrc as routLogoSrc, LOGO_URL as routBunnySrc };
+export { logoSrc as routLogoSrc, bunnySrc as routBunnySrc };
