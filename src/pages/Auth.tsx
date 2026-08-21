@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 import { toast } from "sonner";
+import { checkSigninGuard, recordSigninAttempt, lockoutMessage } from "@/lib/signin-guard";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ArrowLeft, Fingerprint, KeyRound, Loader2, Mail, MailCheck, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
