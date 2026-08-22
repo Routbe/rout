@@ -1201,6 +1201,9 @@ export default function Admin() {
           <p className="text-sm text-muted-foreground">
             Moderation, handle allocation, financial records and e-mail aliasing.
           </p>
+          <a href="/admin/ops" className="inline-block text-sm underline">
+            Operations console — short links, badges &amp; QR-scans
+          </a>
         </header>
 
         {health ? (

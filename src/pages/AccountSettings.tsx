@@ -376,6 +376,16 @@ export default function AccountSettings() {
         </Button>
       </section>
 
+      <section className="mt-4 space-y-3 rounded-2xl border border-border bg-card p-4 sm:p-5">
+        <h2 className="text-lg font-medium">Mijn gegevens</h2>
+        <p className="text-sm text-muted-foreground">
+          Eén pagina met alles wat we bewaren: exporteren of definitief verwijderen.
+        </p>
+        <Button asChild variant="outline" className="h-11 w-full sm:w-auto">
+          <Link to="/my-data">Open mijn gegevens</Link>
+        </Button>
+      </section>
+
       <section className="mt-4 space-y-4 rounded-2xl border border-red-500/30 bg-red-500/5 p-4 sm:p-5">
         <h2 className="flex items-center gap-2 text-lg font-medium text-red-600">
           <AlertTriangle className="h-4 w-4" /> Danger Zone

@@ -31,6 +31,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDomainsRouteImport } from './routes/_authenticated/domains'
+import { Route as AuthenticatedMyDataRouteImport } from './routes/_authenticated/my-data'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthCallbackRouteImport } from './routes/auth_.callback'
 import { Route as RUsernameRouteImport } from './routes/r.$username'
@@ -155,6 +156,11 @@ const AuthenticatedDomainsRoute = AuthenticatedDomainsRouteImport.update({
   path: '/domains',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedMyDataRoute = AuthenticatedMyDataRouteImport.update({
+  id: '/my-data',
+  path: '/my-data',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -253,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/domains': typeof AuthenticatedDomainsRoute
+  '/my-data': typeof AuthenticatedMyDataRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/r/$username': typeof RUsernameRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/domains': typeof AuthenticatedDomainsRoute
+  '/my-data': typeof AuthenticatedMyDataRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/r/$username': typeof RUsernameRoute
@@ -329,6 +337,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/domains': typeof AuthenticatedDomainsRoute
+  '/_authenticated/my-data': typeof AuthenticatedMyDataRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/auth_/callback': typeof AuthCallbackRoute
   '/r/$username': typeof RUsernameRoute
@@ -368,6 +377,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/domains'
+    | '/my-data'
     | '/settings'
     | '/auth/callback'
     | '/r/$username'
@@ -405,6 +415,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/domains'
+    | '/my-data'
     | '/settings'
     | '/auth/callback'
     | '/r/$username'
@@ -443,6 +454,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/domains'
+    | '/_authenticated/my-data'
     | '/_authenticated/settings'
     | '/auth_/callback'
     | '/r/$username'
@@ -644,6 +656,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDomainsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/my-data': {
+      id: '/_authenticated/my-data'
+      path: '/my-data'
+      fullPath: '/my-data'
+      preLoaderRoute: typeof AuthenticatedMyDataRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -782,6 +801,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
   AuthenticatedDomainsRoute: typeof AuthenticatedDomainsRoute
+  AuthenticatedMyDataRoute: typeof AuthenticatedMyDataRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
 }
 
@@ -789,6 +809,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
   AuthenticatedDomainsRoute: AuthenticatedDomainsRoute,
+  AuthenticatedMyDataRoute: AuthenticatedMyDataRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
 }
 
