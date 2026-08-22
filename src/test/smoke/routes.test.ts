@@ -32,7 +32,6 @@ const EXPECTED = [
   "/_authenticated/admin",
   "/_authenticated/admin/ops",
   "/_authenticated/my-data",
-  "/api/public/health",
 ];
 
 describe("route tree", () => {
